@@ -16,5 +16,5 @@ local.properties
 app/src/main/res/raw/pixel_key.txt
 build
 .idea
-
+.kotlin
 
