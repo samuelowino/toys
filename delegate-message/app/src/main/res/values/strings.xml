@@ -3,6 +3,11 @@
     <string name="msg_pixelly">Pixelly</string>
     <string name="msg_tap_to_download">Tap to Download</string>
     <string name="title_finished_download">Finished Download</string>
-    <string name="title_downloading">Downloading...</string>
+    <string name="title_downloading">Downloading…</string>
     <string name="title_download_failed">Download Failed</string>
+    <string name="msg_random_number_generator">Random Number Generator</string>
+    <string name="title_generate">Generate 🤹</string>
+    <string name="download_w_intentservice">Download w/ IntentService</string>
+    <string name="title_downloading_with_intent_service">Downloading w/ Intent Service</string>
+    <string name="title_downloading_without_intent_service">Download without intent service</string>
 </resources>
