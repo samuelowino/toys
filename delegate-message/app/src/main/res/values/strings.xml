@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">delegate-message</string>
+    <string name="msg_pixelly">Pixelly</string>
+    <string name="msg_tap_to_download">Tap to Download</string>
+    <string name="title_finished_download">Finished Download</string>
+    <string name="title_downloading">Downloading...</string>
+    <string name="title_download_failed">Download Failed</string>
+</resources>
