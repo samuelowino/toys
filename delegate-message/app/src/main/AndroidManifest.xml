@@ -22,6 +22,7 @@
         <service
             android:name=".services.DownloadsService"
             android:exported="false"
+            android:process=":remote"
             />
     </application>
 
