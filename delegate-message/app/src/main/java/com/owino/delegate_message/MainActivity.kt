@@ -1,11 +1,17 @@
 package com.owino.delegate_message
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Bundle
+import android.os.IBinder
 import android.os.Messenger
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
@@ -14,11 +20,14 @@ import androidx.core.view.WindowInsetsCompat
 import com.owino.delegate_message.networking.PixelServer
 import com.owino.delegate_message.services.DownloadMessageHandler
 import com.owino.delegate_message.services.DownloadsService
+import com.owino.delegate_message.services.WordlyService
 import kotlin.random.Random
 class MainActivity : AppCompatActivity() {
     private lateinit var statusTextView: TextView
     private lateinit var downloadButton: Button
     private lateinit var downloadProgressView: ProgressBar
+    private var isWordlyServiceConnected = false
+    private lateinit var wordlyService: WordlyService
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -43,6 +52,18 @@ class MainActivity : AppCompatActivity() {
         }
         randomButton.setOnClickListener {
             randomNumberTextView.text = "Random ${Random.nextInt()}"
+        }
+    }
+    override fun onStart() {
+        super.onStart()
+        val intent = Intent(applicationContext, WordlyService::class.java)
+        bindService(intent,serviceConnection, Context.BIND_AUTO_CREATE)
+    }
+    override fun onStop() {
+        super.onStop()
+        if (isWordlyServiceConnected) {
+            unbindService(serviceConnection)
+            isWordlyServiceConnected = false
         }
     }
     private fun downloadWitIntentService() {
@@ -87,6 +108,27 @@ class MainActivity : AppCompatActivity() {
             }
             downloadButton.visibility = View.VISIBLE
             downloadProgressView.visibility = View.GONE
+        }
+    }
+    val serviceConnection: ServiceConnection = object: ServiceConnection {
+        override fun onServiceConnected(component: ComponentName?, iBinder: IBinder?) {
+            val binder: WordlyService.LocalBinder = iBinder as WordlyService.LocalBinder
+            wordlyService = binder.getService()
+            isWordlyServiceConnected = true
+            streamWords()
+            Log.w("ServiceConnection", "Service connection with ${component?.className} established")
+        }
+        override fun onServiceDisconnected(component: ComponentName?) {
+            isWordlyServiceConnected = false
+            Log.e("ServiceConnection","Failed to establish connection to ${component?.className}")
+        }
+    }
+    private fun streamWords() {
+        runOnUiThread {
+            val words = wordlyService.getRandomWords()
+            for (string in words) {
+                Toast.makeText(applicationContext,"Word: $string", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }
