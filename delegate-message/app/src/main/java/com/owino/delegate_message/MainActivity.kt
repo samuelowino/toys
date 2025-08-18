@@ -1,10 +1,12 @@
 package com.owino.delegate_message
+import android.Manifest
 import android.app.job.JobInfo
 import android.app.job.JobScheduler
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.IBinder
 import android.os.Messenger
@@ -18,6 +20,7 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
+import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.owino.delegate_message.networking.PixelServer
@@ -91,6 +94,11 @@ class MainActivity : AppCompatActivity() {
     }
     override fun onStart() {
         super.onStart()
+        val permissionGrantedStatus = ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+        Log.e("MainActivity","Post notification permission $permissionGrantedStatus")
+        if (permissionGrantedStatus == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(this,arrayOf(Manifest.permission.POST_NOTIFICATIONS),4555)
+        }
         val intent = Intent(applicationContext, WordlyService::class.java)
         bindService(intent,serviceConnection, Context.BIND_AUTO_CREATE)
     }
