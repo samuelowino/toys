@@ -1,7 +1,13 @@
 package com.owino.delegate_message.services
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.Service
 import android.app.job.JobParameters
 import android.app.job.JobService
+import android.os.Build
 import android.util.Log
+import androidx.core.app.NotificationCompat
+import com.owino.delegate_message.R
 import com.owino.delegate_message.networking.PixelServer
 import com.owino.delegate_message.services.DownloadsIntentService.Companion.PHOTO_ID_KEY
 import com.owino.delegate_message.services.DownloadsIntentService.Companion.PIXEL_API_KEY
@@ -10,6 +16,9 @@ import java.io.File
 import java.io.FileWriter
 import java.util.Date
 class DownloadScheduledJobService(): JobService() {
+    companion object {
+        const val notificationChannelId = "notification_channel_id"
+    }
     override fun onStartJob(params: JobParameters?): Boolean {
         Log.e("DownloadScheduledJobService","start job")
         if (params == null) return false // work is not scheduled or ongoing
@@ -17,6 +26,17 @@ class DownloadScheduledJobService(): JobService() {
             val extras = params.extras
             val photoId = extras.getInt(PHOTO_ID_KEY,-1)
             val apiKey: String = extras.getString(PIXEL_API_KEY).orEmpty()
+            val channel = NotificationChannel(notificationChannelId,"Background Notifications",
+                NotificationManager.IMPORTANCE_HIGH)
+            val notificationManager: NotificationManager = getSystemService(NotificationManager::class.java)
+            notificationManager.createNotificationChannel(channel)
+            val notification = NotificationCompat.Builder(applicationContext,notificationChannelId)
+                .setContentTitle("Downloading something")
+                .setContentText("Downloading something in background please wait...")
+                .setSmallIcon(R.drawable.download)
+                .setProgress(1,1,true)
+                .build()
+            startForeground(1,notification)
             if (photoId == -1){
                 Log.e("DownloadScheduledJobService", "Failed to download photo with id $photoId, invalid photo id")
             } else {
@@ -52,6 +72,8 @@ class DownloadScheduledJobService(): JobService() {
                         result.clear()
                     }
                 }
+                stopForeground(Service.STOP_FOREGROUND_REMOVE)
+                jobFinished(params,false) // pass true here if you want the job to run again
                 Log.e("DownloadScheduledJobService","Finished scheduled job ✅")
             }
         }.start()
