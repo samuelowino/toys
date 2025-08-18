@@ -95,7 +95,6 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         val permissionGrantedStatus = ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
-        Log.e("MainActivity","Post notification permission $permissionGrantedStatus")
         if (permissionGrantedStatus == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(this,arrayOf(Manifest.permission.POST_NOTIFICATIONS),4555)
         }

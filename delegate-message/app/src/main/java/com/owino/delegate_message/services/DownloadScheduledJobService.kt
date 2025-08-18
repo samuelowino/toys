@@ -35,7 +35,16 @@ class DownloadScheduledJobService(): JobService() {
                 .setSmallIcon(R.drawable.download)
                 .setProgress(1,1,true)
                 .build()
-            startForeground(1,notification)
+            // you can use startForeground or setNotification both seem to work
+            //startForeground(1,notification)
+
+            val notificationId = 44552
+
+            //This will show the notification until the user dismisses it
+            //setNotification(params,notificationId,notification, JobService.JOB_END_NOTIFICATION_POLICY_DETACH)
+
+            //The notification is removed automatically when the job ends
+            setNotification(params,notificationId,notification, JobService.JOB_END_NOTIFICATION_POLICY_REMOVE)
             if (photoId == -1){
                 Log.e("DownloadScheduledJobService", "Failed to download photo with id $photoId, invalid photo id")
             } else {
