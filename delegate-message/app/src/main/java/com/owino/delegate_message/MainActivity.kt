@@ -1,4 +1,6 @@
 package com.owino.delegate_message
+import android.app.job.JobInfo
+import android.app.job.JobScheduler
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -6,6 +8,7 @@ import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
 import android.os.Messenger
+import android.os.PersistableBundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -19,8 +22,12 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.owino.delegate_message.networking.PixelServer
 import com.owino.delegate_message.services.DownloadMessageHandler
-import com.owino.delegate_message.services.DownloadsService
+import com.owino.delegate_message.services.DownloadScheduledJobService
+import com.owino.delegate_message.services.DownloadsIntentService
 import com.owino.delegate_message.services.WordlyService
+import java.io.BufferedReader
+import java.io.File
+import java.io.FileReader
 import kotlin.random.Random
 class MainActivity : AppCompatActivity() {
     private lateinit var statusTextView: TextView
@@ -43,12 +50,40 @@ class MainActivity : AppCompatActivity() {
         val randomNumberTextView = findViewById<TextView>(R.id.random_number_title_view)
         val randomButton = findViewById<Button>(R.id.general_random_button)
         val downloadOptionSwitch = findViewById<SwitchCompat>(R.id.download_style_switch)
+        val jobSchedulerSwitch = findViewById<SwitchCompat>(R.id.job_scheduler_style_switch)
+        val checkJobResult = findViewById<Button>(R.id.general_job_result_button)
+        val outputTextView = findViewById<TextView>(R.id.scheduled_job_result_view)
         downloadButton.setOnClickListener {
             if (downloadOptionSwitch.isChecked) {
                 downloadInProcess()
+            } else if (jobSchedulerSwitch.isChecked){
+                downloadWithJobSchedulerService()
             } else {
                 downloadWitIntentService()
             }
+        }
+        checkJobResult.setOnClickListener {
+            val appDir = File(applicationContext.filesDir,"download_result.txt")
+            if (!appDir.exists()) {
+                appDir.mkdirs()
+            }
+            val outputFile = File(appDir,"download_result.txt")
+            if (!outputFile.exists()) return@setOnClickListener
+            val bufferedReader = BufferedReader(FileReader(outputFile))
+            var resultText: String = ""
+            bufferedReader.use {
+                val strBuilder = StringBuilder()
+                var line: String? = ""
+                while (line != null){
+                    line = bufferedReader.readLine()
+                    if (line != null) {
+                        strBuilder.append(line)
+                    }
+                }
+                resultText = strBuilder.toString()
+                strBuilder.clear()
+            }
+            outputTextView.text = resultText
         }
         randomButton.setOnClickListener {
             randomNumberTextView.text = "Random ${Random.nextInt()}"
@@ -72,7 +107,7 @@ class MainActivity : AppCompatActivity() {
         statusTextView.text = getString(R.string.title_downloading_with_intent_service)
         val message = Messenger(DownloadMessageHandler {
             val successStatus = it.what
-            if (successStatus == DownloadsService.DOWNLOAD_FAILED) {
+            if (successStatus == DownloadsIntentService.DOWNLOAD_FAILED) {
                 statusTextView.text = getString(R.string.title_download_failed)
             } else {
                 statusTextView.text = getString(R.string.title_finished_download)
@@ -80,15 +115,32 @@ class MainActivity : AppCompatActivity() {
             downloadButton.visibility = View.VISIBLE
             downloadProgressView.visibility = View.GONE
         })
-        val downloadIntent = Intent(applicationContext,DownloadsService::class.java)
+        val downloadIntent = Intent(applicationContext,DownloadsIntentService::class.java)
         val photoId = 2014422
         val apiKey = readApiKey()
-        downloadIntent.putExtra(DownloadsService.PIXEL_API_KEY,apiKey)
-        downloadIntent.putExtra(DownloadsService.PHOTO_ID_KEY,photoId)
-        downloadIntent.putExtra(DownloadsService.MESSENGER_KEY, message)
+        downloadIntent.putExtra(DownloadsIntentService.PIXEL_API_KEY,apiKey)
+        downloadIntent.putExtra(DownloadsIntentService.PHOTO_ID_KEY,photoId)
+        downloadIntent.putExtra(DownloadsIntentService.MESSENGER_KEY, message)
         startService(downloadIntent)
     }
-
+    private fun downloadWithJobSchedulerService(){
+        val photoId = 2014422
+        val apiKey = readApiKey()
+        val serviceComponent: ComponentName = ComponentName(
+            applicationContext,
+            DownloadScheduledJobService::class.java
+        )
+        val extras: PersistableBundle = PersistableBundle().apply {
+            putInt(DownloadsIntentService.PHOTO_ID_KEY,photoId)
+            putString(DownloadsIntentService.PIXEL_API_KEY,apiKey)
+        }
+        val jobId = 993311
+        val jobInfo: JobInfo = JobInfo.Builder(jobId,serviceComponent)
+            .setExtras(extras)
+            .build()
+        val scheduler: JobScheduler = applicationContext.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+        scheduler.schedule(jobInfo)
+    }
     private fun readApiKey(): String {
         val inputStream = resources.openRawResource(R.raw.pixel_key)
         return inputStream.bufferedReader().use { it.readText() }

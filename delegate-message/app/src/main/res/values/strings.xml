@@ -10,4 +10,6 @@
     <string name="download_w_intentservice">Download w/ IntentService</string>
     <string name="title_downloading_with_intent_service">Downloading w/ Intent Service</string>
     <string name="title_downloading_without_intent_service">Download without intent service</string>
+    <string name="download_w_jobscheduler">Download w/ JobScheduler</string>
+    <string name="title_check_scheduled_job_result">Check Scheduled Job Result</string>
 </resources>

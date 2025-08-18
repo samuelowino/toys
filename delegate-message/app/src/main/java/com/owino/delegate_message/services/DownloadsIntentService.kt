@@ -6,7 +6,7 @@ import android.os.Message
 import android.os.Messenger
 import android.util.Log
 import com.owino.delegate_message.networking.PixelServer
-class DownloadsService(serviceName: String = "DownloadsService"): IntentService(serviceName) {
+class DownloadsIntentService(serviceName: String = "DownloadsIntentService"): IntentService(serviceName) {
     companion object {
         const val PHOTO_ID_KEY = "PHOTO_ID_KEY"
         const val PIXEL_API_KEY = "PIXEL_API_KEY"
@@ -17,7 +17,7 @@ class DownloadsService(serviceName: String = "DownloadsService"): IntentService(
     }
     @Deprecated("Intentionally messing with a deprecated API")
     override fun onHandleIntent(intent: Intent?) {
-        Log.w("DownloadsService","handle download intent service")
+        Log.w("DownloadsIntentService","handle download intent service")
         intent?.let {
             val pixelServer = PixelServer()
             val photoId = it.getIntExtra(PHOTO_ID_KEY,-1)
