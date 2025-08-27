@@ -9,21 +9,26 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+
+import java.util.List;
 import java.util.Random;
+
 public class CustomersView extends VBox {
+    private final TableView<Customer> customersTable;
     public CustomersView(){
         var mainContainer = new VBox();
         var topControls = new HBox();
         var topRightControls = new HBox();
         var refreshButton = new Button("Refresh");
         refreshButton.setMinWidth(100d);
+        refreshButton.setOnAction(action -> reloadTable());
         var signOutLink = new Hyperlink("Sign out");
         topRightControls.setAlignment(Pos.BOTTOM_RIGHT);
         HBox.setHgrow(topRightControls, Priority.ALWAYS);
         topRightControls.getChildren().add(signOutLink);
         topControls.getChildren().add(refreshButton);
         topControls.getChildren().add(topRightControls);
-        var customersTable = new TableView<Customer>();
+        customersTable = new TableView<>();
         var firstNameColumn = new TableColumn<Customer,String>("First Name");
         firstNameColumn.setCellValueFactory(
                 cellData -> new ReadOnlyStringWrapper(cellData.getValue().firstName())
@@ -41,12 +46,6 @@ public class CustomersView extends VBox {
         customersTable.getColumns().add(firstNameColumn);
         customersTable.getColumns().add(secondNameColumn);
         customersTable.getColumns().add(ordersColumn);
-        ObservableList<Customer> customers = FXCollections.observableArrayList();
-        customers.add(new Customer("Lucas","Cage",new Random().nextDouble(1000,100_000)));
-        customers.add(new Customer("Bruce","Lee",new Random().nextDouble(1000,100_000)));
-        customers.add(new Customer("Mark","Hamil",new Random().nextDouble(1000,100_000)));
-        customers.add(new Customer("Tom","Cruise",new Random().nextDouble(1000,100_000)));
-        customersTable.setItems(customers);
         var separator = new Separator();
         var bottomButtonContainer = new HBox();
         var closeButton = new Button("Close");
@@ -61,5 +60,21 @@ public class CustomersView extends VBox {
         VBox.setMargin(customersTable, new Insets(18));
         VBox.setMargin(bottomButtonContainer, new Insets(18));
         getChildren().add(mainContainer);
+    }
+    private void reloadTable() {
+        updateCustomersTable(CustomersView.customersList());
+    }
+    public void updateCustomersTable(ObservableList<Customer> customerList){
+        customersTable.setItems(customerList);
+        customersTable.refresh();
+    }
+    public static ObservableList<Customer> customersList() {
+        var customers =  List.of(
+                new Customer("Lucas","Cage",Double.parseDouble(String.format("%.2f",new Random().nextDouble(1000,100_000)))),
+                new Customer("Bruce","Lee",Double.parseDouble(String.format("%.2f",new Random().nextDouble(1000,100_000)))),
+                new Customer("Mark","Hamil",Double.parseDouble(String.format("%.2f",new Random().nextDouble(1000,100_000)))),
+                new Customer("Tom","Cruise",Double.parseDouble(String.format("%.2f",new Random().nextDouble(1000,100_000))))
+        );
+        return FXCollections.observableArrayList(customers);
     }
 }

@@ -8,9 +8,11 @@ public class App extends Application {
     }
     @Override
     public void start(Stage stage) throws Exception {
-        var scene = new Scene(new CustomersView(),800,500);
+        var customersView = new CustomersView();
+        var scene = new Scene(customersView,800,500);
         stage.setScene(scene);
         stage.setTitle("VBox and HBox App");
+        stage.setOnShown(e -> customersView.updateCustomersTable(CustomersView.customersList()));
         stage.show();
     }
 }
