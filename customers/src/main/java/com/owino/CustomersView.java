@@ -16,6 +16,7 @@ public class CustomersView extends VBox {
         var topControls = new HBox();
         var topRightControls = new HBox();
         var refreshButton = new Button("Refresh");
+        refreshButton.setMinWidth(100d);
         var signOutLink = new Hyperlink("Sign out");
         topRightControls.setAlignment(Pos.BOTTOM_RIGHT);
         HBox.setHgrow(topRightControls, Priority.ALWAYS);
@@ -49,17 +50,16 @@ public class CustomersView extends VBox {
         var separator = new Separator();
         var bottomButtonContainer = new HBox();
         var closeButton = new Button("Close");
+        closeButton.setMinWidth(100d);
         bottomButtonContainer.getChildren().add(closeButton);
         bottomButtonContainer.setAlignment(Pos.BOTTOM_RIGHT);
         mainContainer.getChildren().add(topControls);
         mainContainer.getChildren().add(customersTable);
         mainContainer.getChildren().add(separator);
         mainContainer.getChildren().add(bottomButtonContainer);
-        VBox.setMargin(topControls, new Insets(12));
-        VBox.setMargin(customersTable, new Insets(12));
-        VBox.setMargin(separator, new Insets(12));
-        VBox.setMargin(bottomButtonContainer, new Insets(12));
+        VBox.setMargin(topControls, new Insets(18d));
+        VBox.setMargin(customersTable, new Insets(18));
+        VBox.setMargin(bottomButtonContainer, new Insets(18));
         getChildren().add(mainContainer);
-        VBox.setMargin(mainContainer, new Insets(12,12,12,12));
     }
 }
