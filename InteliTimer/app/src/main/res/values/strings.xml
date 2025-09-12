@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">InteliTimer</string>
+    <string name="app_timer_service_description">Life Planner timer notification service</string>
+</resources>
