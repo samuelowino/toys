@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/timer_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:textColor="@color/red"
+        android:gravity="center"
+        android:textSize="62dp"
+        android:textStyle="bold"
+        android:text="00:00:00" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/start_timer_button"
+        android:layout_marginHorizontal="22dp"
+        android:layout_marginVertical="22dp"
+        android:layout_alignParentBottom="true"
+        android:text="@string/general_start_timer"
+        android:textAllCaps="false"
+        app:icon="@drawable/timer_icon"
+        app:iconSize="18dp"
+        android:padding="12dp"
+        app:cornerRadius="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</RelativeLayout>

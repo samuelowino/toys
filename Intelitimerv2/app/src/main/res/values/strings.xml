@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Intelitimerv2</string>
+    <string name="timer_service_description">Tick Tick Timer service</string>
+    <string name="general_start_timer">Start Timer</string>
+</resources>
