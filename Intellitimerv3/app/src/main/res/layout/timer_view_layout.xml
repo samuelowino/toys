@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/timer_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:textSize="72dp"
+        android:text="00:00:00"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textColor="@color/red" />
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/session_label_edit_text"
+        android:layout_below="@+id/timer_text_view"
+        android:layout_marginHorizontal="22dp"
+        android:layout_marginVertical="22dp"
+        android:background="@null"
+        android:hint="@string/general_set_session_label"
+        android:padding="12dp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/timer_action_button"
+        android:layout_alignParentBottom="true"
+        android:layout_marginVertical="32dp"
+        android:layout_marginHorizontal="32dp"
+        android:padding="22dp"
+        app:cornerRadius="12dp"
+        android:text="Start"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</RelativeLayout>

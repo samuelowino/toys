@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Intellitimerv3</string>
+    <string name="general_stop">Stop</string>
+    <string name="general_start">Start</string>
+    <string name="general_set_session_label">Set session label</string>
+    <string name="general_default_session">Default Session</string>
+</resources>
