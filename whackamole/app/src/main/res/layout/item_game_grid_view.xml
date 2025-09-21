@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_game_grid_container"
+    android:background="@drawable/game_grid_bg"
+    android:layout_marginHorizontal="4dp"
+    android:layout_marginVertical="4dp"
+    android:layout_width="100dp"
+    android:layout_height="100dp">
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/item_game_grid_mole_image_view"
+        android:src="@drawable/mole"
+        android:layout_centerInParent="true"
+        android:layout_width="60dp"
+        android:layout_height="60dp"/>
+</RelativeLayout>
