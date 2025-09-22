@@ -44,7 +44,7 @@ class DownloadScheduledJobService(): JobService() {
             //setNotification(params,notificationId,notification, JobService.JOB_END_NOTIFICATION_POLICY_DETACH)
 
             //The notification is removed automatically when the job ends
-            setNotification(params,notificationId,notification, JobService.JOB_END_NOTIFICATION_POLICY_REMOVE)
+            setNotification(params,notificationId,notification, JobService.JOB_END_NOTIFICATION_POLICY_DETACH)
             if (photoId == -1){
                 Log.e("DownloadScheduledJobService", "Failed to download photo with id $photoId, invalid photo id")
             } else {
@@ -80,7 +80,7 @@ class DownloadScheduledJobService(): JobService() {
                         result.clear()
                     }
                 }
-                stopForeground(Service.STOP_FOREGROUND_REMOVE)
+                stopForeground(Service.STOP_FOREGROUND_DETACH)
                 jobFinished(params,false) // pass true here if you want the job to run again
                 Log.e("DownloadScheduledJobService","Finished scheduled job ✅")
             }

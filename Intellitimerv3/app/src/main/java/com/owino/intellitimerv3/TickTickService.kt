@@ -86,7 +86,7 @@ class TickTickService: Service() {
             stopForeground(STOP_FOREGROUND_REMOVE)
             stopSelf()
         }.start()
-        return START_NOT_STICKY
+        return START_REDELIVER_INTENT
     }
     private fun composeNotification(durationLabel: String, completionPercent: Int): Notification {
         val contentIntent = Intent(applicationContext, TimerView::class.java)
