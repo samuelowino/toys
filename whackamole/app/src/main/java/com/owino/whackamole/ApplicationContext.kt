@@ -15,15 +15,15 @@ class ApplicationContext: MultiDexApplication() {
     }
     fun executorService(): ExecutorService {
         if (executorService == null) {
-            val corePoolSize = 20
-            val maxPoolSize = 30
+            val corePoolSize = 2
+            val maxPoolSize = 3
             val keepAliveTime: Long = 5
             executorService = ThreadPoolExecutor(
                 corePoolSize,
                 maxPoolSize,
                 keepAliveTime,
                 TimeUnit.SECONDS,
-                ArrayBlockingQueue(100)
+                ArrayBlockingQueue(2)
             )
         }
         return executorService!!

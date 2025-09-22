@@ -87,7 +87,7 @@ class GamePlayView: AppCompatActivity(){
                     runOnUiThread {
                         levelScore = scoreList
                             .map { it.score }
-                            .reduce { acc, value -> acc + value  }
+                            .fold(0f) { acc, value -> acc + value  }
                             .toInt()
                         scoreTextView.text =
                             String.format(Locale.getDefault(), "Score %d", levelScore)
